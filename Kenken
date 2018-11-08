@@ -1,11 +1,3 @@
-##
-## ********************************
-##   Yafan Wang (20739186)
-##   CS 116 Winter 2018
-##   Assignment 09, Problem 1
-## ********************************
-##
-
 import check
 import copy
 
@@ -189,7 +181,7 @@ puzzle3soln=Puzzle(2,[[1,2],[2,1]],[])
 
 
 
-# part a)
+
 ## read_puzzle(fname) reads information from fname file and returns the info as 
 ##     Puzzle value.
 ## Effects: Reads a file called fname.
@@ -217,7 +209,7 @@ check.expect("Ta1", read_puzzle("inp1.txt"), puzzle1 )
 
 
 
-#part b)
+
 ## print_sol(puz, fname) prints the Puzzle puz in fname file
 ## Effects: Writes to a file called fname.
 ## print_sol: Puzzle Str -> None
@@ -237,7 +229,7 @@ check.expect("Ta2", print_sol(puzzle1soln, "out1.txt"), None)
 
 
 
-#part c)
+
 ## find_blank(puz) returns the position of the first blank
 ## space in puz, or False if no cells are blank.  If the first constraint has
 ## only guesses on the board, find_blank returns 'guess'.  
@@ -273,7 +265,8 @@ check.expect("Tc5",find_blank(Puzzle(3,
 
 
 
-#part d)
+
+
 ## used_in_row(puz, pos) returns a list of numbers used in the same 
 ## row as (x,y) position, pos, in the given puz.  
 ## used_in_row: Puzzle Posn -> (listof Nat)
@@ -326,7 +319,6 @@ check.expect("Td6", used_in_col(puzzle1partial3,Posn(0,1)), [2,3])
 
 
 
-#part e)
 ##available_vals(puz,pos) returns a list of valid entries for the (x,y)  
 ## position, pos, of the consumed puzzle, puz.  
 ## available_vals: Puzzle Posn -> (listof Nat)
@@ -347,7 +339,7 @@ check.expect("Te2", available_vals(puzzle1partial2, Posn(0,1)), [3])
 
              
 
-# part f)  
+
 ## place_guess(brd,pos,val) fills in the (x,y) position, pos, of the board, brd, 
 ## with the a guess with value, val
 ## place_guess: (listof (listof (anyof Str Nat Guess))) Posn Nat 
@@ -368,7 +360,7 @@ check.expect("Tf1", place_guess(puzzle3.board, Posn(1,1),2),
 check.expect("Tf2", place_guess(puzzle1partial2.board, Posn(0,1),3), 
              puzzle1partial3.board)
 
-#  **********  DO NOT CHANGE THIS FUNCTION ******************
+
 
 # fill_in_guess(puz, pos, val) fills in the pos Position of puz's board with 
 # a guess with value val
@@ -392,7 +384,7 @@ check.expect("Tf3", fill_in_guess(puzzle1, Posn(3,2),5),
 
 
 
-# part g)
+
 ## guess_valid(puz) determines if the guesses in puz satisfy their constraint
 ## guess_valid: Puzzle -> Bool
 ## Examples: See provided tests
@@ -434,7 +426,7 @@ check.expect("Tg3", guess_valid(Puzzle(2,[[Guess('a',2),Guess('a',1)],
 
 
 
-# part h) 
+
 ## apply_guess(puz) converts all guesses in puz into their corresponding numbers
 ## and removes the first contraint from puz's list of contraints
 ## apply_guess:  Puzzle -> Puzzle
@@ -461,7 +453,7 @@ check.expect("Th1", apply_guess(Puzzle(6,[[5,6,3,4,1,2],[6,1,4,5,2,3],
                                
 
 
-# part i)
+
 ## neighbours(puz) returns a list of next puzzles after puz in
 ## the implicit graph
 ## neighbours: Puzzle -> (listof Puzzle)
@@ -505,7 +497,7 @@ puz2=Puzzle(4,[[4,2,'a','a'],['b',3,'a',4],['b',1,4,2],
 check.expect("Ti3",neighbours(puz1),[puz2])
 
 
-# ******** DO NOT CHANGE THIS PART ***************
+
 # ************** THE MAIN FUNCTION ***************
 ## solve_kenken(orig) finds the solution to a KenKen puzzle,
 ## orig, or returns False if there is no solution.  
