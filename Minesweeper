@@ -1,0 +1,155 @@
+import math
+import check
+
+# A MineGrid is a (listof (listof Bool))
+# Requires:  All lists are non-empty
+#            Each (listof Bool) has the same length 
+
+# note: True means mine, False means safe
+
+# A MineBoard is a (listof (listof Str))
+# Requires: Each string is either a mine ('*') hidden(' ')
+#             or safe (a digit between '0' and '8')
+#           All lists are non-empty
+#           Each (listof Str) has the same length
+
+
+grid3x3 = [[True ,False,False],
+           [False,False,False],
+           [False,False,True]]
+
+board3x3 = [[' ', '1', '0'],
+            [' ', '2', '1'],
+            [' ', ' ', '*']]
+            
+grid4x4= [[True,False,False,False],
+          [False,False,False,True],
+          [False,False,True,True],
+          [False,True,True,False]]
+
+board4x4 = [[' ', '1', '1', '1'],
+            ['1', '2', '3', ' '],
+            ['1', '3', ' ', ' '],
+            ['1', ' ', ' ', '3']]
+
+board3x3a = [[' ', '1', '0'],
+            ['1', '2', '1'],
+            [' ', '1', ' ']]
+
+board3x3b = [['*', '1', '0'],
+            ['1', '2', '1'],
+            ['0', '1', ' ']]
+
+board3x3c = [[' ', '1', '0'],
+            ['1', '2', '1'],
+            ['0', '1', ' ']]
+
+# reveal(grid,board, row, col) reveals the tile at the given row and col(umn)
+#   in board, using the mine positions from grid
+# reveal: MineGrid MineBoard -> None
+# requires: grid and board have the same dimensions and are consistent
+#           0 <= row < height of board
+#           0 <= col < width  of board
+# effects: board is mutated
+
+def reveal(grid,board,row,col):
+    if grid[row][col]:
+        board[row][col] = '*'
+    else:
+        board[row][col] = str(count_mines(grid,row,col))
+
+# count_mines(grid,row,col) returns how many mine tiles are adjacent to the tile
+#    at that position. Adjacency includes diagonals, and does not wrap around.
+# count_mines: MineGrid Nat Nat -> Nat
+# Example:
+# count_mines(grid3x3,1,1) => 2
+
+def count_mines(grid,row,col):
+    n1 = list(map(lambda k: grid[row][k],
+                     list(filter(lambda x: len(grid[0])>x>=0,
+                                 [col-1,col,col+1]))))
+    rowa = n1.count(True)
+    if row>0:
+        n2 = list(map(lambda k: grid[row-1][k],
+                      list(filter(lambda x: len(grid[0])>x>=0,
+                                 [col-1,col,col+1]))))
+        rowb = n2.count(True)
+    if row<len(grid)-1:
+        n3 = list(map(lambda k: grid[row+1][k],
+                      list(filter(lambda x: len(grid[0])>x>=0,
+                                 [col-1,col,col+1]))))
+        rowc = n3.count(True)        
+    if 0<row<len(grid)-1:
+        ans = rowa+rowb+rowc
+    elif 0<row:
+        ans = rowa+rowb
+    else:
+        ans = rowa+rowc
+    if grid[row][col]:
+        return ans-1
+    else:
+        return ans
+
+
+# game_lost(board) returns true if board contains one or more revealed mines,
+#   false otherwise
+# game_lost: GameBoard -> Bool
+
+def game_lost(board):
+    mined_rows = len(list(filter(lambda row: '*' in row, board)))
+    return mined_rows != 0
+
+# helpwon(grid,board,row,col) returns True if for every ' ' on this row in board
+#    ,there's a matching True in grid, and False otherwise.
+# helpwon: MineGrid MineBoard Nat Nat -> Bool
+# Example:
+# helpwon(grid4x4,board4x4,0,0) => True
+
+def helpwon(grid,board,row,col):
+    if col==len(board[0]):
+        return True
+    elif board[row][col] == ' ':
+        if grid[row][col]:
+            return helpwon(grid,board,row,col+1)
+        else: return False
+    else:
+        return helpwon(grid,board,row,col+1)
+
+# checkrow(grid,board,row) returns True if for every ' ' in this board,there's a
+#    matching True in the grid, and False otherwise.
+# checkrow: MineGrid MineBoard Nat -> Bool
+# Example:
+# checkrow(grid4x4,board4x4,0) => True
+
+def checkrow(grid,board,row):
+    if row==len(grid):
+        return True
+    elif ' ' in board[row]:
+        if helpwon(grid,board,row,0):
+            return checkrow(grid,board,row+1)
+        return False
+    else:
+        return checkrow(grid,board,row+1)
+
+# game_won(grid,board) returns True if the game has been won (all safe tiles are
+#    revealed, and no mine tiles are revealed), and False otherwise.
+# game_won: MineGrid MineBoard -> Bool
+# Example:
+# game_won(grid3x3,board3x3) => False
+
+def game_won(grid,board):
+    if game_lost(board):
+        return False
+    return checkrow(grid,board,0)
+        
+# Tests:
+check.expect("Q4T1", game_won(grid3x3,board3x3a),False)
+check.expect("Q4T2", game_won(grid3x3,board3x3b),False)
+check.expect("Q4T3", game_won(grid3x3,board3x3c),True)
+check.expect("Q4T4", game_won(grid4x4,board4x4),True)
+
+
+
+
+
+
